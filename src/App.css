@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+/* Add this to your global CSS file (styles.css or Tailwind @layer) */
+::-webkit-scrollbar {
+    width: 10px; /* Width of the scrollbar */
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: #0B251D; /* Darker green track */
+    border-radius: 5px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #081C15; /* Scrollbar thumb color */
+    border-radius: 10px;
+    border: 2px solid #0B251D; /* Adds padding effect */
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #0D2B20; /* Slightly lighter green on hover */
+  }
+  
