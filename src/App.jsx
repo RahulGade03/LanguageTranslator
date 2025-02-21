@@ -2,11 +2,13 @@ import { useState, useEffect, useRef } from 'react'
 import './App.css'
 import Title from './components/Title'
 import Languages from './components/Languages'
+import { RiExchangeFill } from "react-icons/ri";
 
 function App() {
+  const [fromText, setFromText] = useState('');
+  const [toText, setToText] = useState('');
   const [toLang, setToLang] = useState ('');
   const [fromLang, setFromLang] = useState ('');
-  const [translation, setTranslation] = useState('');
   const dataRef = useRef();
   const fromLangRef = useRef();
   const toLangRef = useRef();
@@ -17,9 +19,18 @@ function App() {
       return a.responseData.translatedText
   }
 
+  function handleExchange(){
+    let temp = fromText;
+    setFromText(toText)
+    setToText(temp)
+    temp = toLang;
+    setToLang(fromLang)
+    setFromLang(temp)
+  }
+
   async function handleTranslate() {
     let a = await fetchData()
-    setTranslation(a);
+    setToText(a);
   }
 
   return (
@@ -29,10 +40,10 @@ function App() {
         <div className="mainArea flex flex-col h-full w-full justify-around">
           <div className="translateArea flex gap-30 justify-center w-full">
             <div className="from bg-[#2D6A4F] rounded-3xl p-4 w-[40%]">
-              <input type="text" ref={dataRef} className='w-full text-white placeholder:text-gray-300 resize-none outline-none' placeholder="Translate here..."/>
+              <input type="text" value={fromText} ref={dataRef} onChange={(e) => {setFromText(e.target.value)}} className='w-full text-white placeholder:text-gray-300 resize-none outline-none' placeholder="Translate here..."/>
             </div>
             <div className="to bg-[#2D6A4F] rounded-3xl p-4 w-[40%]">
-              <input type="text" value={translation} className='w-full text-white placeholder:text-gray-300 resize-none outline-none' placeholder="Translation will be..." readOnly/>
+              <input type="text" value={toText} onChange={(e) => {setToText(e.target.value)}} className='h-auto text-wrap w-full text-white placeholder:text-gray-300 resize-none outline-none' placeholder="Translation will be..." readOnly/>
             </div>
           </div>
           <div className="functionality flex justify-around">
@@ -41,9 +52,8 @@ function App() {
                 <Languages />
               </select>
             </div>
-            <div className="exchangeIcon">
-              <i>
-              </i>
+            <div className="exchangeIcon" onClick={handleExchange}>
+            <i><RiExchangeFill className='size-10'/></i>
             </div>
             <div className="to bg-[#2D6A4F] rounded-2xl">
               <select ref={toLangRef} value={toLang} onChange={(e)=>{setToLang(e.target.value)}} className='outline-none p-2 text-white'>
@@ -52,7 +62,7 @@ function App() {
             </div>
           </div>
           <div className='flex justify-center'>
-            <button id="translateBtn" className='bg-[#081C15] w-[300px] text-white p-3 rounded-3xl font-bold' onClick={handleTranslate}>
+            <button id="translateBtn" className='bg-[#081C15] w-[300px] text-white p-3 rounded-3xl font-bold disabled:bg-[#2b8f6c]' disabled={fromText.length<1 || fromLang.length<2 || toLang.length<2} onClick={handleTranslate}>
               TRANSLATE
             </button>
           </div>
